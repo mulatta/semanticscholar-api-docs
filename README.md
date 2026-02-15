@@ -1,6 +1,6 @@
 # Semantic Scholar API Guide
 
-Korean reference for the [Semantic Scholar Academic Graph API](https://api.semanticscholar.org/) (S2AG API v1), covering all 20 endpoints across papers, authors, citations, recommendations, and datasets.
+Bilingual (Korean / English) reference for the [Semantic Scholar Academic Graph API](https://api.semanticscholar.org/) (S2AG API v1), covering all 20 endpoints across papers, authors, citations, recommendations, and datasets.
 
 ## Contents
 
@@ -21,11 +21,12 @@ Korean reference for the [Semantic Scholar Academic Graph API](https://api.seman
 Requires [Nix](https://nixos.org/) with flakes enabled.
 
 ```bash
-# Static site (zensical)
+# Static site (Korean + English)
 nix build .#site
 
-# PDF (pandoc + typst)
-nix build .#pdf
+# PDF per language
+nix build .#pdf-ko
+nix build .#pdf-en
 ```
 
 Output is in `./result/`.
