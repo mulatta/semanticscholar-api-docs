@@ -25,7 +25,6 @@
         paths = [
           pkgs.noto-fonts-cjk-sans
           pkgs.noto-fonts
-          pkgs.noto-fonts-extra
         ];
       };
     in
@@ -49,10 +48,10 @@
               ];
             }
             ''
-              mkdir -p $out
-              cd ${docs}
+              mkdir -p $out work
+              cd work
               pandoc --file-scope \
-                ${builtins.concatStringsSep " " docFiles} \
+                ${builtins.concatStringsSep " " (map (f: "${docs}/${f}") docFiles)} \
                 --pdf-engine=typst \
                 --template=${pdfDir}/template.typ \
                 --pdf-engine-opt="--font-path=${fonts}/share/fonts" \
