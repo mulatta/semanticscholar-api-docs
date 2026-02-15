@@ -1,29 +1,29 @@
 [project]
 site_name = "Semantic Scholar API Guide"
-site_description = "S2AG API v1 한국어 레퍼런스 — 논문, 저자, 인용, 추천, 데이터셋"
+site_description = "S2AG API v1 Reference — Papers, Authors, Citations, Recommendations, Datasets"
 site_author = "seungwon"
-docs_dir = "docs/ko"
-site_dir = "site/ko"
+docs_dir = "docs/en"
+site_dir = "site/en"
 
 copyright = """
 Semantic Scholar API documentation. Data provided by Semantic Scholar (Allen Institute for AI).
 """
 
 nav = [
-  { "목차" = "00-index.md" },
-  { "1. 개요" = "01-overview.md" },
-  { "2. 인증 및 공통사항" = "02-common.md" },
-  { "3. 논문 검색 API" = "03-paper-search.md" },
-  { "4. 논문 상세 API" = "04-paper-detail.md" },
-  { "5. 저자 API" = "05-author.md" },
-  { "6. 추천 API" = "06-recommendations.md" },
-  { "7. 데이터셋 API" = "07-datasets.md" },
-  { "8. 데이터 모델 레퍼런스" = "08-data-models.md" },
-  { "부록" = "09-appendix.md" },
+  { "Table of Contents" = "00-index.md" },
+  { "1. Overview" = "01-overview.md" },
+  { "2. Authentication & Common" = "02-common.md" },
+  { "3. Paper Search API" = "03-paper-search.md" },
+  { "4. Paper Detail API" = "04-paper-detail.md" },
+  { "5. Author API" = "05-author.md" },
+  { "6. Recommendations API" = "06-recommendations.md" },
+  { "7. Datasets API" = "07-datasets.md" },
+  { "8. Data Model Reference" = "08-data-models.md" },
+  { "Appendix" = "09-appendix.md" },
 ]
 
 [project.theme]
-language = "ko"
+language = "en"
 features = [
     "content.code.copy",
     "content.code.select",
@@ -43,12 +43,12 @@ features = [
 [[project.theme.palette]]
 scheme = "default"
 toggle.icon = "lucide/sun"
-toggle.name = "다크 모드로 전환"
+toggle.name = "Switch to dark mode"
 
 [[project.theme.palette]]
 scheme = "slate"
 toggle.icon = "lucide/moon"
-toggle.name = "라이트 모드로 전환"
+toggle.name = "Switch to light mode"
 
 [project.extra]
 alternate = [

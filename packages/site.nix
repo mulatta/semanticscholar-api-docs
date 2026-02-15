@@ -11,13 +11,23 @@
 
         buildPhase = ''
           runHook preBuild
-          zensical build --clean
+          zensical build -f zensical.toml --clean
+          zensical build -f zensical-en.toml --clean
           runHook postBuild
         '';
 
         installPhase = ''
           runHook preInstall
-          mv site $out
+          mkdir -p $out
+          cp -r site/ko $out/ko
+          cp -r site/en $out/en
+          cat > $out/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html>
+          <head><meta http-equiv="refresh" content="0; url=/ko/"></head>
+          <body><a href="/ko/">Redirect</a></body>
+          </html>
+          HTML
           runHook postInstall
         '';
 
