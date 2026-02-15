@@ -179,3 +179,83 @@ curl "https://api.semanticscholar.org/datasets/v1/diffs/2023-08-01/to/latest/pap
 | 맞춤 추천 | `POST /papers/` | positive/negative 예시 활용 |
 | 전체 코퍼스 분석 | Datasets API | 오프라인 대규모 분석 |
 
+---
+
+# 부록 C: Bulk Search 페이지네이션의 비공식 제한사항
+
+> **⚠ 경험적 발견 (Empirical Finding)**
+> 이 섹션의 내용은 Semantic Scholar 공식 문서에 기재되지 않은 사항으로, 2025년 2월 Biology 도메인(~477K papers/year) 대상 대량 수집 실험을 통해 경험적으로 확인된 것이다. API 서버 측 동작은 사전 공지 없이 변경될 수 있다.
+
+## C.1 Silent Rate Limiting
+
+Bulk Search API(`/paper/search/bulk`)는 rate limit 초과 시 HTTP 429 대신 **정상 응답(200)에 `token: null`을 반환**하여 페이지네이션을 조기 종료한다. 공식 문서에는 `token`이 "더 이상 결과가 없을 때" null이라 기술되어 있으나, 실제로는 결과가 남아있어도 rate limit budget 소진 시 동일하게 null을 반환한다.
+
+**관찰 사례 (Biology 도메인, 2024년 1월, 38,002건 보고):**
+
+| 요청 간 delay | 수집 건수 | 커버리지 | 비고 |
+|--------------|----------|---------|------|
+| 0s | 1,847 | 5% | 429 → tenacity 재시도 → 지연 누적 |
+| 0.3s | 4,861 | 13% | 직전 실험의 budget 소진 영향 |
+| 1s | 13,966 | 37% | cold start 시 최적 |
+| 3s | 8,961 | 24% | 과도한 delay로 오히려 악화 |
+
+## C.2 Rate Limit Budget의 특성
+
+1. **엔드포인트 간 공유**: Bulk Search(`/paper/search/bulk`)와 Batch(`POST /paper/batch`) 호출이 **동일한 budget**을 소모한다. Batch 호출 직후 Bulk Search의 페이지네이션이 짧아지는 현상을 확인했다.
+
+2. **Sliding window 방식**: 시간 경과에 따라 budget이 회복된다. 동일 실행 내에서 초반 월은 커버리지가 낮고, 후반 월은 높아지는 현상이 이를 뒷받침한다.
+
+   | 순서 | 월 | reported | collected | 커버리지 | 직전 Batch 호출 수 |
+   |------|-----|----------|-----------|---------|------------------|
+   | 1 | 2024-01 | 38,002 | 4,861 | 13% | — (이전 실험 잔여) |
+   | 2 | 2024-02 | 34,690 | 4,903 | 14% | ~10 |
+   | 3 | 2024-03 | 39,568 | 12,447 | 31% | ~10 |
+   | 4 | 2024-04 | 35,645 | 32,865 | 92% | ~25 |
+   | 5 | 2024-05 | 40,906 | 14,879 | 36% | ~66 |
+
+3. **429 vs Silent null**: API 키 사용 시 HTTP 429는 거의 발생하지 않으며, 대신 token null로 조용히 종료된다. `retry=True`(tenacity)는 429에만 대응하므로 이 상황을 감지하지 못한다.
+
+## C.3 대량 수집 시 권장 전략
+
+### 2-Pass 전략
+
+Bulk Search에서 많은 fields를 요청하면 서버 부하가 커져 더 빨리 끊긴다. Pass를 분리하면 각 단계의 부담을 줄일 수 있다.
+
+1. **Pass 1**: `fields=paperId`만 요청하여 ID 수집 (서버 부하 최소화)
+2. **Pass 2**: `POST /paper/batch`로 500개씩 상세 필드 조회
+
+### Delay 최적화
+
+- **Pass 1 (Bulk Search)**: 0.5~1s 권장. 너무 짧으면(0s) 429 발생 후 재시도 대기로 cursor 만료, 너무 길면(3s+) budget은 아끼지만 총 소요 시간 증가로 서버 측 cursor가 만료될 수 있다.
+- **Pass 2 (Batch)**: 1~3s 권장. Cursor가 없어 시간 압박은 없으나, 호출이 많을 경우 다음 Pass 1의 budget을 소진시킨다.
+
+### 시간 분할
+
+월별 또는 더 세밀한 단위로 쿼리를 분할하면 각 쿼리의 total이 줄어 pagination limit에 덜 영향받는다.
+
+```python
+# 월별 분할 예시
+for year in range(2020, 2025):
+    for month in range(1, 13):
+        date_range = f"{year}-{month:02d}"
+        params = {
+            "query": "",
+            "fields": "paperId",
+            "fieldsOfStudy": "Biology",
+            "publicationDateOrYear": date_range,
+        }
+        # ... bulk search pagination ...
+```
+
+### Pagination 조기 종료 감지
+
+`total` 필드와 실제 수집 건수를 비교하여 조기 종료 여부를 판단하고, state를 저장해 재시도할 수 있다.
+
+```python
+if collected < reported_total:
+    log.warning(
+        "collected %d / %d (%.0f%%) — pagination limit hit",
+        collected, reported_total, collected / reported_total * 100
+    )
+```
+

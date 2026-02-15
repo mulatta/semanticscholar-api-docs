@@ -170,3 +170,83 @@ curl "https://api.semanticscholar.org/datasets/v1/diffs/2023-08-01/to/latest/pap
 | Custom recommendations | `POST /papers/` | Positive/negative examples |
 | Full corpus analysis | Datasets API | Offline large-scale analysis |
 
+---
+
+# Appendix C: Undocumented Bulk Search Pagination Limitations
+
+> **⚠ Empirical Finding**
+> This section describes behavior NOT documented in the official Semantic Scholar API documentation. These findings were empirically observed during large-scale collection experiments targeting the Biology domain (~477K papers/year) in February 2025. Server-side behavior may change without notice.
+
+## C.1 Silent Rate Limiting
+
+The Bulk Search API (`/paper/search/bulk`) terminates pagination early by returning **`token: null` with HTTP 200** instead of HTTP 429 when the rate limit budget is exhausted. The official documentation states that `token` is null when "no more results can be fetched," but in practice, `token: null` is also returned when results remain but the rate limit budget is depleted.
+
+**Observed results (Biology domain, January 2024, 38,002 papers reported):**
+
+| Delay between requests | Papers collected | Coverage | Notes |
+|------------------------|-----------------|----------|-------|
+| 0s | 1,847 | 5% | 429 → tenacity retry → cumulative delay |
+| 0.3s | 4,861 | 13% | Budget depleted by prior experiments |
+| 1s | 13,966 | 37% | Optimal on cold start |
+| 3s | 8,961 | 24% | Excessive delay worsened results |
+
+## C.2 Rate Limit Budget Characteristics
+
+1. **Shared across endpoints**: Bulk Search (`/paper/search/bulk`) and Batch (`POST /paper/batch`) calls consume the **same budget**. Heavy Batch API usage immediately before Bulk Search causes shorter pagination.
+
+2. **Sliding window recovery**: The budget recovers over time. Within a single run processing multiple months, early months show lower coverage while later months improve as the budget recovers.
+
+   | Order | Month | Reported | Collected | Coverage | Prior Batch calls |
+   |-------|-------|----------|-----------|----------|-------------------|
+   | 1 | 2024-01 | 38,002 | 4,861 | 13% | — (residual from prior experiments) |
+   | 2 | 2024-02 | 34,690 | 4,903 | 14% | ~10 |
+   | 3 | 2024-03 | 39,568 | 12,447 | 31% | ~10 |
+   | 4 | 2024-04 | 35,645 | 32,865 | 92% | ~25 |
+   | 5 | 2024-05 | 40,906 | 14,879 | 36% | ~66 |
+
+3. **429 vs Silent null**: With an API key, HTTP 429 rarely occurs. Instead, pagination terminates silently via `token: null`. Retry mechanisms (e.g., tenacity) that only handle 429 cannot detect this condition.
+
+## C.3 Recommended Strategies for Large-Scale Collection
+
+### 2-Pass Strategy
+
+Requesting many fields in Bulk Search increases server load, causing earlier termination. Separating into two passes reduces per-stage load.
+
+1. **Pass 1**: Request only `fields=paperId` to collect IDs (minimizes server load)
+2. **Pass 2**: Use `POST /paper/batch` with 500 IDs per request for full field retrieval
+
+### Delay Optimization
+
+- **Pass 1 (Bulk Search)**: 0.5–1s recommended. Too short (0s) triggers 429 → retry backoff → cursor expiration. Too long (3s+) conserves budget but increases total elapsed time, risking server-side cursor expiration.
+- **Pass 2 (Batch)**: 1–3s recommended. No cursor timeout pressure, but heavy usage depletes the budget for the next Pass 1 cycle.
+
+### Time Partitioning
+
+Splitting queries by month or finer granularity reduces each query's total result count, making it less susceptible to the pagination limit.
+
+```python
+# Monthly partitioning example
+for year in range(2020, 2025):
+    for month in range(1, 13):
+        date_range = f"{year}-{month:02d}"
+        params = {
+            "query": "",
+            "fields": "paperId",
+            "fieldsOfStudy": "Biology",
+            "publicationDateOrYear": date_range,
+        }
+        # ... bulk search pagination ...
+```
+
+### Detecting Early Pagination Termination
+
+Compare the `total` field with the actual number of collected results to detect early termination. Save state for retry.
+
+```python
+if collected < reported_total:
+    log.warning(
+        "collected %d / %d (%.0f%%) — pagination limit hit",
+        collected, reported_total, collected / reported_total * 100
+    )
+```
+
