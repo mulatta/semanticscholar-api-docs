@@ -235,5 +235,3 @@ curl ".../paper/649def.../authors?fields=affiliations,papers&limit=2"
 curl ".../paper/649def.../authors?fields=url,papers.year,papers.authors&offset=2"
 ```
 
----
-← [이전: 논문 검색 API](03-paper-search.md) | [목차](00-index.md) | [다음: 저자 API →](05-author.md)

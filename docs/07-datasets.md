@@ -197,5 +197,3 @@ updated = updated.fullOuterJoin(deletes).mapValues(
 updated.values().map(json.dumps).saveAsTextFile("s3://updated-dataset")
 ```
 
----
-← [이전: 추천 API](06-recommendations.md) | [목차](00-index.md) | [다음: 데이터 모델 레퍼런스 →](08-data-models.md)

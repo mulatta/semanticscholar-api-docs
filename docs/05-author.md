@@ -188,5 +188,3 @@ curl "https://api.semanticscholar.org/graph/v1/author/1741101/papers?fields=url,
 curl "https://api.semanticscholar.org/graph/v1/author/1741101/papers?fields=citations.authors&offset=260"
 ```
 
----
-← [이전: 논문 상세 API](04-paper-detail.md) | [목차](00-index.md) | [다음: 추천 API →](06-recommendations.md)

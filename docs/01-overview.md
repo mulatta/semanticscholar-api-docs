@@ -34,5 +34,3 @@ Semantic Scholar API는 Allen Institute for AI가 운영하는 학술 논문 검
 - **fields 파라미터**: 응답에 포함할 필드를 지정. 지정하지 않으면 최소 필드만 반환됨
 - **외부 ID 지원**: DOI, ArXiv, PubMed, ACL, DBLP, MAG 등의 외부 식별자로도 논문 조회 가능
 
----
-← [목차](00-index.md) | [다음: 인증 및 공통사항 →](02-common.md)

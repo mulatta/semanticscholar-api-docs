@@ -179,5 +179,3 @@ curl "https://api.semanticscholar.org/datasets/v1/diffs/2023-08-01/to/latest/pap
 | 맞춤 추천 | `POST /papers/` | positive/negative 예시 활용 |
 | 전체 코퍼스 분석 | Datasets API | 오프라인 대규모 분석 |
 
----
-← [이전: 데이터 모델 레퍼런스](08-data-models.md) | [목차](00-index.md)

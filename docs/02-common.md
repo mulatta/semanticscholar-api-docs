@@ -204,5 +204,3 @@ Computer Science, Medicine, Chemistry, Biology, Materials Science, Physics, Geol
 | **404** | 찾을 수 없음 | `"Paper with id ### not found"` |
 | **404** | 제목 매칭 실패 | `"Title match not found"` (`/paper/search/match` 전용) |
 
----
-← [이전: 개요](01-overview.md) | [목차](00-index.md) | [다음: 논문 검색 API →](03-paper-search.md)

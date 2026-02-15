@@ -297,5 +297,3 @@ Computer Science, Medicine, Chemistry, Biology, Materials Science, Physics, Geol
 | `PaperBatch` | `POST /paper/batch` 요청 본문 | `ids`: 논문 ID 문자열 배열 (최대 500개) |
 | `AuthorIdList` | `POST /author/batch` 요청 본문 | `ids`: 저자 ID 문자열 배열 (최대 1,000개) |
 
----
-← [이전: 데이터셋 API](07-datasets.md) | [목차](00-index.md) | [다음: 부록 →](09-appendix.md)

@@ -298,5 +298,3 @@ fields=snippet.annotations.sentences             # 문장 주석만
 curl "https://api.semanticscholar.org/graph/v1/snippet/search?query=The+literature+graph+is+a+property+graph&limit=1"
 ```
 
----
-← [이전: 인증 및 공통사항](02-common.md) | [목차](00-index.md) | [다음: 논문 상세 API →](04-paper-detail.md)

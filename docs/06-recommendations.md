@@ -107,5 +107,3 @@ POST /recommendations/v1/papers/
 }
 ```
 
----
-← [이전: 저자 API](05-author.md) | [목차](00-index.md) | [다음: 데이터셋 API →](07-datasets.md)
