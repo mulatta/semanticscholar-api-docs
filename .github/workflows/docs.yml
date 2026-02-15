@@ -1,0 +1,85 @@
+name: Build & Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "packages/**"
+      - "typst/**"
+      - "zensical.toml"
+      - "flake.nix"
+      - "flake.lock"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "packages/**"
+      - "typst/**"
+      - "zensical.toml"
+      - "flake.nix"
+      - "flake.lock"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-site:
+    name: Build Site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: NixOS/nix-installer-action@main
+      - run: nix build .#site
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: result
+
+  build-pdf:
+    name: Build PDF
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: NixOS/nix-installer-action@main
+      - run: nix build .#pdf
+      - uses: actions/upload-artifact@v4
+        with:
+          name: s2-api-guide-pdf
+          path: result/s2-api-guide.pdf
+
+  deploy-pages:
+    name: Deploy Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build-site, build-pdf]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
+
+  release-pdf:
+    name: Attach PDF to Release
+    needs: build-pdf
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: s2-api-guide-pdf
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          files: s2-api-guide.pdf
+          make_latest: true
+          body: |
+            Auto-generated from latest docs on main branch.
