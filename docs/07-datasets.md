@@ -1,6 +1,8 @@
 ---
 title: "7. 데이터셋 API"
 description: "전체 코퍼스 다운로드, 릴리스 관리, 증분 업데이트(diff)"
+---
+<!-- claude:meta
 type: chapter
 chapter: 7
 service: datasets
@@ -24,7 +26,7 @@ nav:
   prev: 06-recommendations.md
   next: 08-data-models.md
   index: 00-index.md
----
+-->
 
 # 7. 데이터셋 API
 

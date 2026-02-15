@@ -1,6 +1,8 @@
 ---
 title: "5. 저자 API"
 description: "저자 검색, 상세 조회, 배치 조회, 저자별 논문 목록"
+---
+<!-- claude:meta
 type: chapter
 chapter: 5
 service: graph
@@ -24,7 +26,7 @@ nav:
   prev: 04-paper-detail.md
   next: 06-recommendations.md
   index: 00-index.md
----
+-->
 
 # 5. 저자 API
 

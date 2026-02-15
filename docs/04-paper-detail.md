@@ -1,6 +1,8 @@
 ---
 title: "4. 논문 상세 API"
 description: "논문 단일/배치 조회, 인용·참조·저자 목록 조회"
+---
+<!-- claude:meta
 type: chapter
 chapter: 4
 service: graph
@@ -27,7 +29,7 @@ nav:
   prev: 03-paper-search.md
   next: 05-author.md
   index: 00-index.md
----
+-->
 
 # 4. 논문 상세 API
 

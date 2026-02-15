@@ -1,6 +1,8 @@
 ---
 title: "부록"
 description: "전체 엔드포인트 요약표 + 실전 활용 패턴 6개 (인용 그래프, 대량 수집, 공동 저자 네트워크, 추천, 증분 업데이트, 엔드포인트 선택)"
+---
+<!-- claude:meta
 type: appendix
 topics: [endpoint-summary, usage-patterns, citation-graph, bulk-collection, co-author-network, recommendations-pattern, incremental-update, endpoint-selection]
 related: [00-index.md, 03-paper-search.md, 04-paper-detail.md, 05-author.md, 06-recommendations.md, 07-datasets.md]
@@ -8,7 +10,7 @@ nav:
   prev: 08-data-models.md
   next: null
   index: 00-index.md
----
+-->
 
 # 부록 A: 전체 엔드포인트 요약
 

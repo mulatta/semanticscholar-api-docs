@@ -1,6 +1,8 @@
 ---
 title: "3. 논문 검색 API"
 description: "논문 검색 5개 엔드포인트: relevance search, bulk search, title match, autocomplete, snippet search"
+---
+<!-- claude:meta
 type: chapter
 chapter: 3
 service: graph
@@ -27,7 +29,7 @@ nav:
   prev: 02-common.md
   next: 04-paper-detail.md
   index: 00-index.md
----
+-->
 
 # 3. 논문 검색 API
 

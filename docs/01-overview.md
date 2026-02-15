@@ -1,6 +1,8 @@
 ---
 title: "1. 개요"
 description: "Semantic Scholar API 구성 및 주요 개념"
+---
+<!-- claude:meta
 type: chapter
 chapter: 1
 topics: [api-structure, services, key-concepts]
@@ -9,7 +11,7 @@ nav:
   prev: null
   next: 02-common.md
   index: 00-index.md
----
+-->
 
 # 1. 개요
 

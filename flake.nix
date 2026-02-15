@@ -1,5 +1,5 @@
 {
-  description = "PROJ_NAME";
+  description = "Semantic Scholar API Guide";
 
   inputs = {
     # keep-sorted start
@@ -19,6 +19,7 @@
       imports = [
         ./nix/formatter.nix
         ./nix/shell.nix
+        ./packages/flake-module.nix
       ];
 
       perSystem =

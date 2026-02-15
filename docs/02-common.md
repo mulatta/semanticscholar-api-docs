@@ -1,6 +1,8 @@
 ---
 title: "2. 인증 및 공통사항"
 description: "API 키, Base URL, fields 파라미터, 페이지네이션, ID 형식, 필터, 에러 코드"
+---
+<!-- claude:meta
 type: chapter
 chapter: 2
 topics: [authentication, api-key, fields-parameter, pagination, paper-id-formats, filters, error-codes, rate-limit]
@@ -10,7 +12,7 @@ nav:
   prev: 01-overview.md
   next: 03-paper-search.md
   index: 00-index.md
----
+-->
 
 # 2. 인증 및 공통사항
 

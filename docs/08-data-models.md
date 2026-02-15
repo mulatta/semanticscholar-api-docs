@@ -1,6 +1,8 @@
 ---
 title: "8. 데이터 모델 레퍼런스"
 description: "전체 데이터 모델 필드 사전 — BasePaper, FullPaper, Author, Citation, Reference, Snippet, 응답 래퍼, 특수 변형 모델"
+---
+<!-- claude:meta
 type: chapter
 chapter: 8
 topics: [data-models, basepaper, fullpaper, author, citation, reference, embedding, tldr, snippet, open-access, publication-venue, fields-of-study, response-wrappers, special-models]
@@ -37,7 +39,7 @@ nav:
   prev: 07-datasets.md
   next: 09-appendix.md
   index: 00-index.md
----
+-->
 
 # 8. 데이터 모델 레퍼런스
 

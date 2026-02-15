@@ -1,6 +1,8 @@
 ---
 title: "6. 추천 API"
 description: "단일 논문 기반 추천, 다중 논문(positive/negative) 기반 추천"
+---
+<!-- claude:meta
 type: chapter
 chapter: 6
 service: recommendations
@@ -18,7 +20,7 @@ nav:
   prev: 05-author.md
   next: 07-datasets.md
   index: 00-index.md
----
+-->
 
 # 6. 추천 API
 
