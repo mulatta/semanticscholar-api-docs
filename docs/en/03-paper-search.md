@@ -48,6 +48,14 @@ GET /graph/v1/paper/search
 curl "https://api.semanticscholar.org/graph/v1/paper/search?query=transformer+attention&fields=title,year,citationCount&limit=5"
 ```
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=transformer+attention api/graph/paper-search.hurl
+```
+
+Change the search query via `--variable`. Add `--json` flag to output captured values as JSON.
+
 ## 3.2 Paper Bulk Search
 
 Optimized for large-scale paper data retrieval. Similar to relevance search but **without relevance ranking**.
@@ -124,6 +132,14 @@ Format: `field:order` (default `paperId:asc`)
 | Query syntax | Plain text | Boolean operators supported |
 | Use case | User-facing search | Large-scale data collection |
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=transformer+attention api/graph/paper-bulk-search.hurl
+```
+
+Change the search query via `--variable`. Add `--json` flag to output captured values (`total`, `token`, etc.) as JSON.
+
 ## 3.3 Paper Title Match
 
 Finds the **single best-matching paper** for a given title. Ideal for retrieving S2 metadata when you already know the paper title.
@@ -175,6 +191,14 @@ curl "https://api.semanticscholar.org/graph/v1/paper/search/match?query=totalGar
 
 > Wrapped in a `data` array but always contains 0–1 results. `matchScore` is the title matching confidence score.
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=Attention+Is+All+You+Need api/graph/paper-title-match.hurl
+```
+
+Specify the paper title via `--variable query=...`. Add `--json` flag to output captured values (`paper_id`, `match_score`, etc.) as JSON.
+
 ## 3.4 Paper Autocomplete
 
 For interactive search autocompletion. Returns minimal information (titles, etc.) quickly for partial queries.
@@ -197,6 +221,14 @@ GET /graph/v1/paper/autocomplete
   ]
 }
 ```
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=attention+is+all api/graph/paper-autocomplete.hurl
+```
+
+Specify the partial query via `--variable query=...`. Add `--json` flag to output autocomplete results as JSON.
 
 ## 3.5 Snippet Search
 
@@ -269,4 +301,12 @@ Each result includes:
 ```bash
 curl "https://api.semanticscholar.org/graph/v1/snippet/search?query=The+literature+graph+is+a+property+graph&limit=1"
 ```
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=literature+graph+property+graph api/graph/snippet-search.hurl
+```
+
+Change the search query via `--variable query=...`. Add `--json` flag to output captured values (snippet text, score, etc.) as JSON.
 

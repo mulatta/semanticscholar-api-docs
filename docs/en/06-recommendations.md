@@ -45,6 +45,14 @@ curl "https://api.semanticscholar.org/recommendations/v1/papers/forpaper/649def3
 }
 ```
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/recommendations/single-paper.hurl
+```
+
+Use `--variable paper_id=...` to change the seed paper ID. Add `--json` to output captured values (`rec_count`, `first_paper_id`) as JSON.
+
 ## 6.2 Multi-Paper Recommendations (Positive/Negative)
 
 Get tailored recommendations by providing multiple papers as positive (similar to) and negative (avoid) examples.
@@ -87,4 +95,12 @@ POST /recommendations/v1/papers/
   ]
 }
 ```
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY api/recommendations/multi-paper.hurl
+```
+
+Paper IDs are defined directly in the hurl file's JSON body. To change `positivePaperIds`/`negativePaperIds`, edit `api/recommendations/multi-paper.hurl`. Add `--json` to output captured values (`rec_count`, `first_paper_id`) as JSON.
 

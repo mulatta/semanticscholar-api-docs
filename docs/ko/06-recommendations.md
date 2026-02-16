@@ -64,6 +64,14 @@ curl "https://api.semanticscholar.org/recommendations/v1/papers/forpaper/649def3
 }
 ```
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/recommendations/single-paper.hurl
+```
+
+`--variable paper_id=...`로 기준 논문 ID를 변경할 수 있다. `--json` 플래그를 추가하면 캡처값(`rec_count`, `first_paper_id`)을 JSON으로 출력한다.
+
 ## 6.2 다중 논문 기반 추천 (Positive/Negative)
 
 여러 논문을 positive(유사하게)/negative(회피하게) 예시로 제공하여 맞춤 추천을 받는다.
@@ -106,4 +114,12 @@ POST /recommendations/v1/papers/
   ]
 }
 ```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY api/recommendations/multi-paper.hurl
+```
+
+논문 ID는 hurl 파일의 JSON body에 직접 정의되어 있다. `positivePaperIds`/`negativePaperIds`를 변경하려면 `api/recommendations/multi-paper.hurl` 파일을 편집한다. `--json` 플래그를 추가하면 캡처값(`rec_count`, `first_paper_id`)을 JSON으로 출력한다.
 

@@ -76,6 +76,14 @@ GET /graph/v1/paper/search
 curl "https://api.semanticscholar.org/graph/v1/paper/search?query=transformer+attention&fields=title,year,citationCount&limit=5"
 ```
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=transformer+attention api/graph/paper-search.hurl
+```
+
+`--variable` 옵션으로 검색어를 변경할 수 있다. `--json` 플래그를 추가하면 캡처된 값을 JSON으로 출력한다.
+
 ## 3.2 Paper Bulk Search
 
 대량 논문 데이터 조회용. relevance search와 유사하나 **검색 관련도 없이** 대량 검색에 최적화되어 있다.
@@ -152,6 +160,14 @@ GET /graph/v1/paper/search/bulk
 | 쿼리 문법 | 평문 | 불리언 연산자 지원 |
 | 용도 | 사용자 대면 검색 | 대량 데이터 수집 |
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=transformer+attention api/graph/paper-bulk-search.hurl
+```
+
+`--variable` 옵션으로 검색어를 변경할 수 있다. `--json` 플래그를 추가하면 캡처된 값(`total`, `token` 등)을 JSON으로 출력한다.
+
 ## 3.3 Paper Title Match
 
 제목과 가장 유사한 **단일 논문**을 찾는다. 이미 제목을 알고 있을 때 해당 논문의 S2 메타데이터를 가져오는 데 적합하다.
@@ -203,6 +219,14 @@ curl "https://api.semanticscholar.org/graph/v1/paper/search/match?query=totalGar
 
 > `data` 배열로 감싸져 있지만 항상 0~1개 결과만 포함된다. `matchScore`는 제목 매칭 신뢰도 점수다.
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=Attention+Is+All+You+Need api/graph/paper-title-match.hurl
+```
+
+`--variable query=...`로 찾고자 하는 논문 제목을 지정한다. `--json` 플래그를 추가하면 `paper_id`, `match_score` 등 캡처된 값을 JSON으로 출력한다.
+
 ## 3.4 Paper Autocomplete
 
 인터랙티브 검색 자동완성용. 부분 쿼리에 대해 최소 정보(제목 등)를 빠르게 반환한다.
@@ -225,6 +249,14 @@ GET /graph/v1/paper/autocomplete
   ]
 }
 ```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=attention+is+all api/graph/paper-autocomplete.hurl
+```
+
+`--variable query=...`로 부분 쿼리를 지정한다. `--json` 플래그를 추가하면 자동완성 결과를 JSON으로 출력한다.
 
 ## 3.5 Snippet Search
 
@@ -297,4 +329,12 @@ fields=snippet.annotations.sentences             # 문장 주석만
 ```bash
 curl "https://api.semanticscholar.org/graph/v1/snippet/search?query=The+literature+graph+is+a+property+graph&limit=1"
 ```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=literature+graph+property+graph api/graph/snippet-search.hurl
+```
+
+`--variable query=...`로 검색어를 변경할 수 있다. `--json` 플래그를 추가하면 스니펫 텍스트와 점수 등 캡처된 값을 JSON으로 출력한다.
 

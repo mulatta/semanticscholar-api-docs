@@ -26,6 +26,13 @@ GET /datasets/v1/release/
 
 Release IDs are in date format (YYYY-MM-DD), and each release contains the full dataset.
 
+#### Test with hurl
+
+```bash
+# List releases (no API key required)
+hurl api/releases/list.hurl
+```
+
 ## 7.2 Release Detail
 
 Retrieve the list of datasets included in a specific release.
@@ -58,6 +65,12 @@ GET /datasets/v1/release/{release_id}
 **Example:**
 ```bash
 curl "https://api.semanticscholar.org/datasets/v1/release/latest"
+```
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable release=2026-02-10 api/releases/detail.hurl
 ```
 
 ## 7.3 Dataset Download Links
@@ -100,6 +113,15 @@ for url in meta["files"]:
     resp = requests.get(url, stream=True)
     # ...
 ```
+
+#### Test with hurl
+
+```bash
+# Get download links for papers dataset
+hurl --variable s2_api_key=$S2_API_KEY --variable release=2026-02-10 api/datasets/papers.hurl
+```
+
+All dataset-specific hurl files are under `api/datasets/`: `abstracts.hurl`, `authors.hurl`, `citations.hurl`, `embeddings-specter_v2.hurl`, `paper-ids.hurl`, `s2orc.hurl`, `s2orc_v2.hurl`, `tldrs.hurl`.
 
 ## 7.4 Incremental Diffs
 
@@ -171,4 +193,13 @@ updated = updated.fullOuterJoin(deletes).mapValues(
 ).filter(lambda x: x[1] is not None)
 updated.values().map(json.dumps).saveAsTextFile("s3://updated-dataset")
 ```
+
+#### Test with hurl
+
+```bash
+# Get incremental diff for papers
+hurl --variable s2_api_key=$S2_API_KEY --variable from=2026-02-03 --variable to=2026-02-10 api/diffs/papers.hurl
+```
+
+All dataset-specific hurl files are under `api/diffs/`: `abstracts.hurl`, `authors.hurl`, `citations.hurl`, `embeddings-specter_v2.hurl`, `paper-ids.hurl`, `tldrs.hurl`.
 

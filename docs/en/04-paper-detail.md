@@ -45,6 +45,14 @@ curl "https://api.semanticscholar.org/graph/v1/paper/649def34f8be52c8b66281af98a
 
 `paperId` (always returned), `corpusId`, `externalIds`, `url`, `title`, `abstract`, `venue`, `publicationVenue`, `year`, `referenceCount`, `citationCount`, `influentialCitationCount`, `isOpenAccess`, `openAccessPdf`, `fieldsOfStudy`, `s2FieldsOfStudy`, `publicationTypes`, `publicationDate`, `journal`, `citationStyles`, `authors`, `citations`, `references`, `embedding`, `tldr`, `textAvailability`
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-detail.hurl
+```
+
+Change the paper ID via `--variable`. Add `--json` flag to output captured values as JSON.
+
 ## 4.2 Paper Batch Lookup
 
 Look up up to 500 papers in a single request.
@@ -83,6 +91,14 @@ curl -X POST "https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,
 - Max **500** Paper IDs
 - Single response max **10MB**
 - Max **9,999** citations/references per paper
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-batch.hurl
+```
+
+The ID from `--variable paper_id` is included in the batch request's `ids` array. Add `--json` flag to output captured values as JSON.
 
 ## 4.3 Paper Citations
 
@@ -133,6 +149,14 @@ curl ".../paper/649def.../citations?fields=authors&offset=1500&limit=500"
 | `contextsWithIntent` | Array of combined context+intent objects |
 | `isInfluential` | Whether the citation is influential |
 
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-citations.hurl
+```
+
+Change the paper ID via `--variable`. Add `--json` flag to output captured values as JSON.
+
 ## 4.4 Paper References
 
 Retrieve the list of papers referenced by this paper (i.e., this paper's bibliography).
@@ -168,6 +192,14 @@ GET /graph/v1/paper/{paper_id}/references
 | Analogy | "Who cited me?" | "Who did I cite?" |
 | Response object key | `citingPaper` | `citedPaper` |
 | `publicationDateOrYear` filter | Supported | Not supported |
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-references.hurl
+```
+
+Change the paper ID via `--variable`. Add `--json` flag to output captured values as JSON.
 
 ## 4.5 Paper Authors
 
@@ -206,4 +238,12 @@ curl ".../paper/649def.../authors?fields=affiliations,papers&limit=2"
 # Author's paper years + paper authors (with offset)
 curl ".../paper/649def.../authors?fields=url,papers.year,papers.authors&offset=2"
 ```
+
+#### Test with hurl
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-authors.hurl
+```
+
+Change the paper ID via `--variable`. Add `--json` flag to output captured values as JSON.
 

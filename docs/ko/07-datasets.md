@@ -51,6 +51,13 @@ GET /datasets/v1/release/
 
 릴리스 ID는 날짜 형식(YYYY-MM-DD)이며, 각 릴리스는 전체 데이터셋을 포함한다.
 
+#### hurl 테스트
+
+```bash
+# 릴리스 목록 조회 (API key 불필요)
+hurl api/releases/list.hurl
+```
+
 ## 7.2 릴리스 상세 조회
 
 특정 릴리스에 포함된 데이터셋 목록을 가져온다.
@@ -83,6 +90,12 @@ GET /datasets/v1/release/{release_id}
 **예시:**
 ```bash
 curl "https://api.semanticscholar.org/datasets/v1/release/latest"
+```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable release=2026-02-10 api/releases/detail.hurl
 ```
 
 ## 7.3 데이터셋 다운로드 링크
@@ -125,6 +138,15 @@ for url in meta["files"]:
     resp = requests.get(url, stream=True)
     # ...
 ```
+
+#### hurl 테스트
+
+```bash
+# papers 데이터셋 다운로드 링크 조회
+hurl --variable s2_api_key=$S2_API_KEY --variable release=2026-02-10 api/datasets/papers.hurl
+```
+
+`api/datasets/` 아래에 모든 데이터셋별 hurl 파일이 있다: `abstracts.hurl`, `authors.hurl`, `citations.hurl`, `embeddings-specter_v2.hurl`, `paper-ids.hurl`, `s2orc.hurl`, `s2orc_v2.hurl`, `tldrs.hurl`.
 
 ## 7.4 증분 업데이트 (Incremental Diffs)
 
@@ -196,4 +218,13 @@ updated = updated.fullOuterJoin(deletes).mapValues(
 ).filter(lambda x: x[1] is not None)
 updated.values().map(json.dumps).saveAsTextFile("s3://updated-dataset")
 ```
+
+#### hurl 테스트
+
+```bash
+# papers 증분 diff 조회
+hurl --variable s2_api_key=$S2_API_KEY --variable from=2026-02-03 --variable to=2026-02-10 api/diffs/papers.hurl
+```
+
+`api/diffs/` 아래에 모든 데이터셋별 hurl 파일이 있다: `abstracts.hurl`, `authors.hurl`, `citations.hurl`, `embeddings-specter_v2.hurl`, `paper-ids.hurl`, `tldrs.hurl`.
 

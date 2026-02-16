@@ -73,6 +73,14 @@ curl "https://api.semanticscholar.org/graph/v1/paper/649def34f8be52c8b66281af98a
 
 `paperId`(항상 반환), `corpusId`, `externalIds`, `url`, `title`, `abstract`, `venue`, `publicationVenue`, `year`, `referenceCount`, `citationCount`, `influentialCitationCount`, `isOpenAccess`, `openAccessPdf`, `fieldsOfStudy`, `s2FieldsOfStudy`, `publicationTypes`, `publicationDate`, `journal`, `citationStyles`, `authors`, `citations`, `references`, `embedding`, `tldr`, `textAvailability`
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-detail.hurl
+```
+
+`--variable`로 논문 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
+
 ## 4.2 논문 배치 조회
 
 최대 500개의 논문을 한 번의 요청으로 조회한다.
@@ -111,6 +119,14 @@ curl -X POST "https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,
 - 최대 **500개** Paper ID
 - 단일 응답 최대 **10MB**
 - 논문당 최대 **9,999건**의 citations/references만 반환
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-batch.hurl
+```
+
+`--variable paper_id`에 지정한 ID가 배치 요청의 `ids` 배열에 포함된다. `--json` 플래그로 캡처값을 JSON 출력한다.
 
 ## 4.3 논문의 인용 목록 (Citations)
 
@@ -161,6 +177,14 @@ curl ".../paper/649def.../citations?fields=authors&offset=1500&limit=500"
 | `contextsWithIntent` | 문맥+의도가 결합된 객체 배열 |
 | `isInfluential` | 영향력 있는 인용 여부 |
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-citations.hurl
+```
+
+`--variable`로 논문 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
+
 ## 4.4 논문의 참조 목록 (References)
 
 이 논문이 참조하는 논문들의 목록을 가져온다 (= 이 논문의 참고문헌).
@@ -196,6 +220,14 @@ GET /graph/v1/paper/{paper_id}/references
 | 비유 | "누가 나를 인용했나" | "내가 누구를 인용했나" |
 | 반환 객체 키 | `citingPaper` | `citedPaper` |
 | `publicationDateOrYear` 필터 | ✅ 지원 | ❌ 미지원 |
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-references.hurl
+```
+
+`--variable`로 논문 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
 
 ## 4.5 논문의 저자 목록
 
@@ -234,4 +266,12 @@ curl ".../paper/649def.../authors?fields=affiliations,papers&limit=2"
 # 저자의 논문 연도 + 논문의 저자들 (offset 사용)
 curl ".../paper/649def.../authors?fields=url,papers.year,papers.authors&offset=2"
 ```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable paper_id=649def34f8be52c8b66281af98ae884c09aef38b api/graph/paper-authors.hurl
+```
+
+`--variable`로 논문 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
 

@@ -80,6 +80,14 @@ curl "https://api.semanticscholar.org/graph/v1/author/search?query=totalGarbageN
 | `next` | integer | 다음 페이지 시작 위치 (없으면 마지막 페이지) |
 | `data` | array | 저자 객체 배열 |
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable query=hinton api/graph/author-search.hurl
+```
+
+`--variable`로 검색어를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
+
 ## 5.2 저자 상세 조회
 
 특정 저자의 상세 정보를 가져온다. 최대 10MB 응답 제한.
@@ -123,6 +131,14 @@ curl "https://api.semanticscholar.org/graph/v1/author/1741101?fields=url,papers.
 
 > **참고**: `paperCount`, `citationCount`, `hIndex`는 Swagger 스키마상 `string` 타입이나, 실제 응답에서는 숫자 값이 반환된다.
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable author_id=1741101 api/graph/author-detail.hurl
+```
+
+`--variable`로 저자 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
+
 ## 5.3 저자 배치 조회
 
 여러 저자를 한 번에 조회한다.
@@ -156,6 +172,14 @@ fields=url,papers.year,papers.authors    # URL, 논문의 연도/저자
 - 최대 **1,000개** Author ID
 - 단일 응답 최대 **10MB**
 
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable author_id=1741101 api/graph/author-batch.hurl
+```
+
+`--variable`로 저자 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
+
 ## 5.4 저자의 논문 목록
 
 특정 저자의 논문을 배치로 가져온다.
@@ -187,4 +211,12 @@ curl "https://api.semanticscholar.org/graph/v1/author/1741101/papers?fields=url,
 # 인용 논문의 저자까지 중첩 + offset
 curl "https://api.semanticscholar.org/graph/v1/author/1741101/papers?fields=citations.authors&offset=260"
 ```
+
+#### hurl 테스트
+
+```bash
+hurl --variable s2_api_key=$S2_API_KEY --variable author_id=1741101 api/graph/author-papers.hurl
+```
+
+`--variable`로 저자 ID를 변경할 수 있다. `--json` 플래그로 캡처값을 JSON 출력한다.
 
