@@ -82,6 +82,11 @@ jobs:
         with:
           pattern: s2-api-guide-*
           merge-multiple: true
+      - name: Delete existing release
+        run: gh release delete latest --yes --cleanup-tag || true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
