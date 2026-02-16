@@ -1,6 +1,6 @@
 // Common styles shared between Korean and English PDFs
 
-#import "@preview/cmarker:0.1.8": render
+#import "@preview/cmarker:0.1.8": render-with-metadata
 
 #let project(
   title: "",
@@ -89,7 +89,11 @@
 }
 
 // Render a markdown file, stripping YAML frontmatter and HTML comments
-#let md(path) = render(
-  read(path),
-  smart-punctuation: false,
-)
+#let md(path) = {
+  let (_, body) = render-with-metadata(
+    read(path),
+    smart-punctuation: false,
+    metadata-block: "frontmatter-yaml",
+  )
+  body
+}
