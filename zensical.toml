@@ -52,6 +52,6 @@ toggle.name = "라이트 모드로 전환"
 
 [project.extra]
 alternate = [
-    { name = "한국어", link = "/ko/", lang = "ko" },
-    { name = "English", link = "/en/", lang = "en" },
+    { name = "한국어", link = "/semanticscholar-api-docs/ko/", lang = "ko" },
+    { name = "English", link = "/semanticscholar-api-docs/en/", lang = "en" },
 ]

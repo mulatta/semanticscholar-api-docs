@@ -21,13 +21,32 @@
           mkdir -p $out
           cp -r site/ko $out/ko
           cp -r site/en $out/en
+
+          # Root redirect (relative path — works regardless of subpath)
           cat > $out/index.html << 'HTML'
           <!DOCTYPE html>
           <html>
-          <head><meta http-equiv="refresh" content="0; url=/ko/"></head>
-          <body><a href="/ko/">Redirect</a></body>
+          <head><meta http-equiv="refresh" content="0; url=ko/"></head>
+          <body><a href="ko/">Redirect</a></body>
           </html>
           HTML
+
+          # Language root redirects to landing page
+          cat > $out/ko/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html>
+          <head><meta http-equiv="refresh" content="0; url=00-index/"></head>
+          <body><a href="00-index/">Redirect</a></body>
+          </html>
+          HTML
+          cat > $out/en/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html>
+          <head><meta http-equiv="refresh" content="0; url=00-index/"></head>
+          <body><a href="00-index/">Redirect</a></body>
+          </html>
+          HTML
+
           runHook postInstall
         '';
 
